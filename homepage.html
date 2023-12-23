@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quizlet</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+</head>
+
+    <style>
+        @import url("https://fonts.googleapis.com/css?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+            
+        }
+   
+
+        .logo {
+            position: absolute;
+            top: 100px;
+            left: 100px;
+            
+
+            
+            font-size: 22px; 
+
+        }
+        .neon-text {
+            font-family: 'Arial', sans-serif; 
+            font-size: 3em;
+        }
+
+        .letter {
+            color: var(--color);
+            text-shadow: 0 0 10px var(--color), 0 0 20px var(--color), 0 0 30px var(--color);
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-image: url('image.jpg');
+            background-size:1600px;
+            background-repeat: no-repeat;
+            background-position: center;
+            flex-direction: column;
+            position: relative;
+            padding-top: 19px;
+            
+            
+            
+            
+            
+        }
+
+        .wrapper button {
+            background: transparent;
+            backdrop-filter: blur(40px);
+            width: 150px;
+            height: 40px;
+            color: white;
+            text-align: center;
+            padding-top: 0;
+            border: 2px solid rgba(255, 255, 255, .2);
+            border-radius: 8px;   
+            margin-left: 210px;
+            margin-top: 155px;
+            border-color: #99eafa;
+            position: absolute;
+        
+        }
+        
+        
+        button:hover {
+            background-color: transparent;
+            box-shadow: 0px 15px 20px rgba(34, 222, 255, 0.862);
+            transform: translateY(-1px);
+        }
+
+        button:active {
+            transform: translateY(-2px);
+        }
+
+    
+
+        .overview p{
+            color: #fff;
+            font-size: 18px;
+            text-align: left;
+            width: 700px;
+            height: auto;
+            position: absolute;
+            right: 660px;
+            bottom: 250px;
+            text-align: justify;
+            
+            
+        }
+
+
+
+        .aboutlink {
+            background-color: #020e26;
+            padding: 414px;
+            
+            position: absolute;
+            width: 860px;
+            top: 700px;
+            box-sizing:content-box;
+            padding-top: 50px;
+            
+            
+            margin: 0;  
+            height: 390px;
+        }
+
+
+
+    
+        
+
+        .social-icons a {
+        margin: 0 10px;
+        color: #c639eda2;
+        font-size: 30px;
+        text-decoration: none;
+        }   
+
+        .social-icons a:hover {
+        color: #007bff;
+        }
+
+        .navi {
+            position: fixed;
+            z-index: 9999;
+            top: 0rem;
+            padding-left: 75rem;
+            padding-top: 1rem;
+            
+            
+        }
+
+        .navi ul li{
+            float: left;
+            list-style-type: none;
+            text-decoration: none;
+            margin: 1rem;
+            
+        }
+
+        .navi li a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        section h1 {
+            color: #fff;
+            text-align: center;
+            font-size: 3rem;
+        }
+
+        section p {
+            margin-top: 5rem;
+            text-align: justify;
+            width: 500px;
+            float: right;
+            position: absolute;
+        }
+
+        .contactlink {
+            background-color: #070d2f;
+            box-sizing: border-box;
+            position: absolute;
+            padding: 535px;
+            margin-top: 3425px;
+            width: 1688px;
+            text-align: center;
+            height: 200px;
+            
+            
+            
+
+        }
+
+        
+            
+
+        .navi ul li a.active {
+            border-bottom: 2px solid blue;
+            text-decoration: none; 
+        }
+
+        .about-paragraph {
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+        .about-paragraph.fade-in {
+            opacity: 1;
+        }
+
+        .box {
+            background-color: #3431317a;
+            border: 1px solid rgb(45, 45, 157);
+            position: absolute;
+            bottom: 480px;
+            left: 260px;
+            padding-top: 90px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            margin: 0 auto;
+            width: 580px;
+            height: 400px;
+            margin-left: 500px;
+
+            
+        }
+
+        .social-icons{
+            margin-top: 50px;
+            
+        }
+
+        .contactlink img {
+            height: 550px;
+            position: absolute;
+            top: 140px;
+            left: 300px;
+        }
+     
+       
+        
+    </style>
+
+</head>
+
+
+<body>
+
+    <div class="navi">
+        <nav>
+            <ul>
+                <li><a href="#" id="homeLink" class="active">Home</a></li>
+                <li><a href="#" id="aboutLink">About</a></li>
+                <li><a href="#" id="contactLink">Contact</a></li>
+            </ul>
+          </nav>
+    </div>
+
+
+    <div class="logo">
+        <h1 class="neon-text">
+            <span class="letter" style="--color: #ff6ec7;">S</span>
+            <span class="letter" style="--color: #00ffcc;">t</span>
+            <span class="letter" style="--color: #ffcc00;">u</span>
+            <span class="letter" style="--color: #cc00ff;">d</span>
+            <span class="letter" style="--color: #00ccff;">y</span>
+            &nbsp;
+            <span class="letter" style="--color: #ff0066;">B</span>
+            <span class="letter" style="--color: #66ff66;">u</span>
+            <span class="letter" style="--color: #ffcc00;">d</span>
+            <span class="letter" style="--color: #0099ff;">d</span>
+            <span class="letter" style="--color: #ff6600;">y</span>
+        </h1>
+    </div>
+    
+    <div class="wrapper" id="loginPage">
+        <form action="http://localhost/system.html" onsubmit="return showPage('userInfoPage')">
+    <div class="wrapper" id="loginPage">
+        <button type="submit" class="btn">Let's get started</button>
+        
+            </div>
+        </form>
+    </div>
+
+    <div class="overview">
+        <p>
+            Welcome to our innovative flashcard system, where learning becomes an engaging journey!
+            Craft questions, input multiple-choice options, and embark on personalized quizzes that
+            cater to your unique study needs. Our user-friendly platform empowers efficient learning 
+            by allowing you to create, customize, and quiz yourself on the go. Dive into interactive 
+            sessions that elevate your understanding and retention of key concepts, revolutionizing 
+            the way you study. Engage with your material, track progress, and master content effortlessly 
+            through dynamic, customizable quizzes. Join us and take charge of your learning path today!
+        </p>
+    </div>
+        
+    <section id = "aboutlink" class="aboutlink">
+            <h1>About us:</h1>
+            
+            <p class="about-paragraph" style="color: #fff;">We are students from Eastern Visayas State University (EVSU) Ormoc, and we created this system to be your
+                study buddy. Our main aim? To make studying a whole lot simpler for all of us. School can get pretty overwhelming,
+                so we designed a platform that's user-friendly and packed with study tools. It's where you'll find resources, connect
+                with peers, and hopefully, make learning a bit more exciting. Let's team up and revolutionize how we study together!
+            </p>
+            <img src="https://freesvg.org/img/1529923151.png" alt="People Image" style="height: 300px;  margin-left: 550px; margin-top: 50px;">
+
+
+         
+    </section>
+
+    <section id = "contactlink" class="contactlink">
+        <div class="box">
+            <h1 style="color: #fff; text-align: center;">Contact us: </h1>
+            <div class="social-icons">
+                
+                <a href="https://web.facebook.com/tirzocharles.apuya" target="_blank"><i class="fab fa-facebook"></i></a>
+                <a href="https://twitter.com/stfhndl" target="_blank"><i class="fab fa-twitter"></i></a>
+                <a href="https://www.instagram.com/dyndynnn/?hl=en" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.youtube.com/@annierosefernandez101" target="_blank"><i class="fab fa-youtube"></i></a>
+                <a href="https://web.facebook.com/profile.php?id=100009562472500" target="_blank"><i class="far fa-envelope"></i></a>
+            </div>
+        </div>
+
+        <img src="https://images.vexels.com/media/users/3/245755/isolated/preview/082620a0679233afe517ec4d715eb094-mailman-semi-flat.png" alt="">
+        
+
+
+
+    </section>
+
+    
+    
+
+    <script>
+        function showPage(pageId) {
+            const pages = ['loginPage', 'forgotPasswordPage', 'signUpPage', 'contact', 'about'];
+            pages.forEach(page => {
+                document.getElementById(page).classList.add('hidden');
+            });
+            document.getElementById(pageId).classList.remove('hidden');
+            return false;
+        }
+
+        function toggleFooter() {
+            const footer = document.getElementById('contactFooter');
+        }
+
+        function scrollToSection(sectionId) {
+        const section = document.getElementById(sectionId);
+        section.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    
+    document.getElementById('homeLink').addEventListener('click', function(event) {
+        event.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    document.getElementById('aboutLink').addEventListener('click', function(event) {
+        event.preventDefault();
+        scrollToSection('aboutlink');
+    });
+
+    document.getElementById('contactLink').addEventListener('click', function(event) {
+        event.preventDefault();
+        scrollToSection('contactlink');
+    });
+
+    function handleNavigationClick(event) {
+        const links = document.querySelectorAll('.navi ul li a');
+        links.forEach(link => link.classList.remove('active'));
+        event.target.classList.add('active');
+    }
+
+    
+    document.getElementById('homeLink').addEventListener('click', function(event) {
+        event.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        handleNavigationClick(event);
+    });
+
+    document.getElementById('aboutLink').addEventListener('click', function(event) {
+        event.preventDefault();
+        scrollToSection('aboutlink');
+        handleNavigationClick(event);
+    });
+
+    document.getElementById('contactLink').addEventListener('click', function(event) {
+        event.preventDefault();
+        scrollToSection('contactlink');
+        handleNavigationClick(event);
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+    const aboutParagraph = document.querySelector('.about-paragraph');
+  
+    const aboutObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                aboutParagraph.classList.remove('fade-in');
+                setTimeout(() => {
+                    aboutParagraph.classList.add('fade-in');
+                }, 50); // Adjust the delay if needed
+                aboutObserver.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.5
+    });
+  
+    aboutObserver.observe(document.querySelector('#aboutlink'));
+});
+
+
+</script>
+    
+    
+
+</body>
+
+</html>

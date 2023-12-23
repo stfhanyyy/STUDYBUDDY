@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quizlet</title>
+    <link href="styles.css" type="text/css" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+</head>
+
+<body>
+    <header>
+        <h1 class="neon-text">
+            <span class="letter" style="--color: #ff6ec7;">S</span>
+            <span class="letter" style="--color: #00ffcc;">t</span>
+            <span class="letter" style="--color: #ffcc00;">u</span>
+            <span class="letter" style="--color: #cc00ff;">d</span>
+            <span class="letter" style="--color: #00ccff;">y</span>
+            &nbsp;
+            <span class="letter" style="--color: #ff0066;">B</span>
+            <span class="letter" style="--color: #66ff66;">u</span>
+            <span class="letter" style="--color: #ffcc00;">d</span>
+            <span class="letter" style="--color: #0099ff;">d</span>
+            <span class="letter" style="--color: #ff6600;">y</span>
+        </h1>
+    </header>
+
+    <div class="home">
+        <a href="homepage.html">
+            <i class="fas fa-home"></i>
+        </a>
+    </div>
+
+    <div class="wrapper" id="quizForm">
+        <h1>Enter Questions and Answers</h1>
+        <form method="post" action="php.php" onsubmit="return addQuestion(event);">
+            <div class="input-box">
+                <input name="question" type="text" placeholder="Enter question" id="questionInput">
+                <i class='bx bx-question'></i>
+            </div>
+
+            <div class="input-box">
+                <input name="answer" type="text" placeholder="Enter answer" id="answerInput">
+                <i class='bx bx-check'></i>
+            </div>
+
+            <button type="submit" class="btn">Add Question</button>
+        </form>
+
+        <button class="btn" onclick="startQuiz()">Start</button>
+        <p id="questionCount"></p>
+    </div>
+
+    <div class="wrapper hidden" id="quizContainer">
+        <h1>Your Flashcards</h1>
+        <div class="flashcard-container" id="flashcardContainer"></div>
+    </div>
+
+    <div class="history-button" id="historyButton" onclick="toggleHistory()">
+        <hr>
+        <hr>
+        <hr>
+    </div>
+
+    <div class="history-container" id="historyContainer">
+        <span class="close-button" onclick="toggleHistory()">&times;</span>
+        <h2>History</h2>
+        <div id="historyList"></div>
+    </div>
+    <script>
+        const quizForm = document.getElementById('quizForm');
+        const quizContainer = document.getElementById('quizContainer');
+        const flashcardContainer = document.getElementById('flashcardContainer');
+        const questionCount = document.getElementById('questionCount');
+        const questionsAndAnswers = [];
+        let currentFlashcardIndex = 0;
+    
+        function updateHistory(question, answer) {
+            const historyList = document.getElementById('historyList');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'history-message';
+            messageDiv.innerHTML = `<strong>Question:</strong> ${question}<br><strong>Answer:</strong> ${answer}`;
+            historyList.appendChild(messageDiv);
+        }
+    
+        function toggleHistory() {
+            const historyContainer = document.getElementById('historyContainer');
+            historyContainer.style.display = (historyContainer.style.display === 'none' || historyContainer.style.display === '') ? 'block' : 'none';
+        }
+    
+        function addQuestion(event) {
+            console.log("addQuestion function called");
+            event.preventDefault();
+    
+            const questionInput = document.getElementById('questionInput').value.trim();
+            const answerInput = document.getElementById('answerInput').value.trim();
+    
+            if (questionInput !== '' && answerInput !== '') {
+                questionsAndAnswers.push({ question: questionInput, answer: answerInput });
+    
+                updateHistory(questionInput, answerInput);
+    
+                document.getElementById('questionInput').value = '';
+                document.getElementById('answerInput').value = '';
+    
+                questionCount.innerText = `Questions added: ${questionsAndAnswers.length}`;
+    
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', 'php.php', true);
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    
+                const data = `question=${encodeURIComponent(questionInput)}&answer=${encodeURIComponent(answerInput)}`;
+    
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState == 4) {
+                        if (xhr.status == 200) {
+                            console.log(xhr.responseText);
+                        } else {
+                            console.error("Error: " + xhr.status + " - " + xhr.statusText);
+                        }
+                    }
+                };
+    
+                xhr.send(data);
+            } else {
+                // Display a message when the input fields are empty
+                alert("Please enter both a question and an answer before adding.");
+            }
+    
+            return false;
+        }
+    
+        function startQuiz() {
+            // Close the history container when starting the quiz
+            toggleHistory();
+    
+            if (questionsAndAnswers.length > 0) {
+                shuffleQuestions();
+                currentFlashcardIndex = 0;
+                showNextFlashcard();
+            } else {
+                alert('Please add at least one question before starting the quiz.');
+            }
+        }
+    
+        function shuffleQuestions() {
+            for (let i = questionsAndAnswers.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [questionsAndAnswers[i], questionsAndAnswers[j]] = [questionsAndAnswers[j], questionsAndAnswers[i]];
+            }
+        }
+    
+        function showNextFlashcard() {
+            quizForm.classList.add('hidden');
+            quizContainer.classList.remove('hidden');
+    
+            if (currentFlashcardIndex < questionsAndAnswers.length) {
+                const currentFlashcard = questionsAndAnswers[currentFlashcardIndex];
+                const flashcardDiv = createFlashcard(currentFlashcard.question);
+                flashcardContainer.innerHTML = '';
+                flashcardContainer.appendChild(flashcardDiv);
+    
+                const revealAnswerBtn = document.createElement('button');
+                revealAnswerBtn.className = 'reveal-answer-btn';
+                revealAnswerBtn.innerText = 'Reveal Answer';
+                revealAnswerBtn.addEventListener('click', () => revealAnswer(currentFlashcard.answer));
+    
+                const nextQuestionBtn = document.createElement('button');
+                nextQuestionBtn.className = 'next-question-btn';
+                nextQuestionBtn.innerText = 'Next Question';
+                nextQuestionBtn.addEventListener('click', showNextFlashcard);
+    
+                const buttonContainer = document.createElement('div');
+                buttonContainer.className = 'button-container';
+                buttonContainer.appendChild(revealAnswerBtn);
+                buttonContainer.appendChild(nextQuestionBtn);
+    
+                flashcardContainer.appendChild(buttonContainer);
+    
+                currentFlashcardIndex++;
+            } else {
+                const messageDiv = createFlashcard('All questions answered!');
+                flashcardContainer.innerHTML = '';
+                flashcardContainer.appendChild(messageDiv);
+    
+                const returnButton = document.createElement('button');
+                returnButton.className = 'btn';
+                returnButton.innerText = 'Return';
+                returnButton.style.width = "50%";
+                returnButton.addEventListener('click', () => {
+                    quizForm.classList.remove('hidden');
+                    quizContainer.classList.add('hidden');
+                    currentFlashcardIndex = 0;
+                    questionsAndAnswers.length = 0;
+                    questionCount.innerText = '';
+                });
+    
+                flashcardContainer.appendChild(returnButton);
+            }
+        }
+    
+        function createFlashcard(content) {
+            const flashcardDiv = document.createElement('div');
+            flashcardDiv.className = 'flashcard';
+            flashcardDiv.innerHTML = `<p>${content}</p>`;
+            return flashcardDiv;
+        }
+    
+        function revealAnswer(answer) {
+            const answerDiv = document.createElement('div');
+            answerDiv.className = 'flashcard answer';
+            answerDiv.innerHTML = `<p>${answer}</p>`;
+            flashcardContainer.innerHTML = '';
+            flashcardContainer.appendChild(answerDiv);
+    
+            const nextQuestionBtn = document.createElement('button');
+            nextQuestionBtn.className = 'next-question-btn';
+            nextQuestionBtn.innerText = 'Next Question';
+            nextQuestionBtn.addEventListener('click', showNextFlashcard);
+    
+            flashcardContainer.appendChild(nextQuestionBtn);
+        }
+    </script>
+    
+
+</body>
+
+</html>
